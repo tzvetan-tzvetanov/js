@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+
+<html>
+    <title>Find Employee</title>
+     
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+ 
+    <script type="text/javascript">
+    	
+ 
+ 			// Create the XHR object.
+			function createCORSRequest(method, url) {
+				  var xhr = new XMLHttpRequest();
+				  if ("withCredentials" in xhr) {
+				    // XHR for Chrome/Firefox/Opera/Safari.
+				    xhr.open(method, url, true);
+				  } else if (typeof XDomainRequest != "undefined") {
+				    // XDomainRequest for IE.
+				    xhr = new XDomainRequest();
+				    xhr.open(method, url);
+				  } else {
+				    // CORS not supported.
+				    xhr = null;
+				  }
+				  return xhr;
+			}
+
+
+			// Make the actual CORS request.
+            
+			function makeCorsRequest() {
+				  // This is a sample server that supports CORS.
+				  var url = 'http://services.odata.org/TripPinRESTierService/(S(zei05vk1wil2hbqp1ja0mfy5))/People?$format=application/json;odata.metadata=none';
+
+				  var xhr = createCORSRequest('GET', url);
+				  if (!xhr) {
+				    alert('CORS not supported');
+				    return;
+			}
+
+			// Response handlers.
+			xhr.onload = function() {
+				    var list_people = JSON.parse(xhr.responseText);
+				    
+				    $.each(list_people.value, function (i, item) {
+ 
+                        var eachEmpline = "<div>Name: " + item.FirstName + " " + item.LastName + "<br/>Age: " + item.Age + "<br/><br/></div>";
+ 
+                        $('#employees').append(eachEmpline);
+ 
+                    });
+			};
+
+			  xhr.onerror = function() {
+			    alert('Woops, there was an error making the request.');
+			};
+
+			xhr.send();
+		}
+ 
+ 
+ 
+    </script>
+</head>
+<body>
+    <form id="form1" style="font-family: Arial">
+    <div>
+        <br />
+        <input type="button" name="load" value="Test" onclick="makeCorsRequest()" /></button>
+        
+        <br />
+        <div id="status">
+        </div>
+        <br />
+        <div id="employees">
+        </div>
+    </div>
+    </form>
+</body>
+</html>
