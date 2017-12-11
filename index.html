@@ -41,14 +41,20 @@
 
 			// Response handlers.
 			xhr.onload = function() {
+					$('#employees').empty();
 				    var list_people = JSON.parse(xhr.responseText);
 				    
-				    $.each(list_people.value, function (i, item) {
+				    $.each(list_people.value, function (x,item) {
  
-                        var eachEmpline = "<div>Name: " + item.FirstName + " " + item.LastName + "<br/>Age: " + item.Age + "<br/><br/></div>";
+                        var eachEmpline = "<div class='clickme' id='" + x + "'>Name: " + item.FirstName + " " + item.LastName + "<br/>Age: " + item.Age + "<br/><br/></div>";
+
  
                         $('#employees').append(eachEmpline);
  
+                    });
+                    $("div .clickme").click(function(){
+                    	var id = "div #" + $(this).attr('id');
+                    	$( id ).hide();
                     });
 			};
 
